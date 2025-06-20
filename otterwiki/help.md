@@ -60,7 +60,7 @@ Attachments will be moved with the renamed page.
 
 #### Page delete
 
-A page (with all its attachments) can be deleted with <span class="help-button"><span class="btn btn-square btn-sm"><i class="fas fa-ellipsis-v"></i></span> <i class="fas fa-caret-right"></i> <span class="btn btn-square btn-sm"><i class="far fa-trash-alt"></i></span> Delete</span>. Please note: This deletion can be reverted. An Otter Wiki never makes the repository forget.
+A page (with all its attachments) can be deleted with <span class="help-button"><span class="btn btn-square btn-sm"><i class="fas fa-ellipsis-v"></i></span> <i class="fas fa-caret-right"></i> <span class="btn btn-square btn-sm"><i class="far fa-trash-alt"></i></span> Delete</span>. Please note: This deletion can be reverted. Otter知识助手 never makes the repository forget.
 
 #### Page name
 

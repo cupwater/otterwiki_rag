@@ -43,6 +43,21 @@
                     批量创建
                 </a>
 {% endif %}
+{% if has_permission('WRITE') and pagepath and pagepath != 'Home' %}
+                <div class="sidebar-divider"></div>
+                <a href="{{ url_for("rename", path=pagepath) }}" class="sidebar-link sidebar-link-with-icon">
+                    <span class="sidebar-icon">
+                        <i class="far fa-edit"></i>
+                    </span>
+                    重命名页面
+                </a>
+                <a href="{{ url_for("delete", path=pagepath) }}" class="sidebar-link sidebar-link-with-icon text-danger">
+                    <span class="sidebar-icon">
+                        <i class="far fa-trash-alt"></i>
+                    </span>
+                    删除页面
+                </a>
+{% endif %}
 {%- if config.SIDEBAR_SHORTCUTS.split()|length > 0 %}
 <br />
 {%- endif %}

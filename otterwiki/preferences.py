@@ -239,7 +239,7 @@ def send_approvement_mail(user):
         name=user.name,
         url=url_for("login", _external=True),
     )
-    subject = "Your account has been approved - {} - An Otter Wiki".format(
+    subject = "Your account has been approved - {} - Otter知识助手".format(
         app.config["SITE_NAME"]
     )
     send_mail(subject=subject, recipients=[user.email], text_body=text_body)

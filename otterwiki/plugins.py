@@ -2,7 +2,7 @@
 # vim: set et ts=8 sts=4 sw=4 ai:
 
 """
-This file contains both the "plugin spec" for An Otter Wiki, and several
+This file contains both the "plugin spec" for Otter知识助手, and several
 plugins included with the app itself. For now this is a proof of concept
 that will be expanded in the future.
 

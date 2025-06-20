@@ -1,6 +1,6 @@
-# Examples for plugins into An Otter Wiki
+# Examples for plugins into Otter知识助手
 
-An Otter Wiki uses [pluggy](https://pluggy.readthedocs.io/en/stable/) to provide
+Otter知识助手 uses [pluggy](https://pluggy.readthedocs.io/en/stable/) to provide
 function hooks that can be used to add or modify features via plugins.
 
 The API for plugins is currently experimental and very limited. If you

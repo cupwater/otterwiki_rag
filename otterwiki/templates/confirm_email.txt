@@ -1,7 +1,7 @@
 Hello {{name}},
 
 Someone, perhaps you, registered this email address ({{email}}) for an account
-at {{sitename}} (An Otter Wiki).
+at {{sitename}} (Otter知识助手).
 
 If you wish to proceed with this request, please confirm your email
 address here: {{url}}

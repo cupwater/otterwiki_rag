@@ -20,9 +20,9 @@ The first steps you might want to do:
    and then display them and link to them inside the page.
 6. [Create new pages](/-/create)! If you need help with the Markdown syntax,
    check out the [Markdown guide](/-/help/syntax).
-7. Read the [user guide](/-/help) and learn about An Otter Wikis features.
+7. Read the [user guide](/-/help) and learn about Otter知识助手s features.
 
-We hope that An Otter Wiki is just what you are looking for.
+We hope that Otter知识助手 is just what you are looking for.
 If you have any suggestions, feature requests or run into any
 issues, please reach out and report them
 via [github](https://github.com/redimp/otterwiki/issues).

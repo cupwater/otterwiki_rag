@@ -1,6 +1,6 @@
 {{- if .Values.ingress.enabled }}
 
-Open up your installation of An Otter Wiki via
+Open up your installation of Otter知识助手 via
 {{ range $host := .Values.ingress.hosts }}
     http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}
 {{- end }}

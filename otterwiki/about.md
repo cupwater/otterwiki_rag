@@ -1,6 +1,6 @@
-# About An Otter Wiki
+# About Otter知识助手
 
-[An Otter Wiki](https://otterwiki.com) is a software for collaborative content management, called a [wiki](https://en.wikipedia.org/wiki/Wiki). The content is stored in a git repository, which keeps track of all data and changes. [Markdown](https://daringfireball.net/projects/markdown) is used as Markup language.
+[Otter知识助手](https://otterwiki.com) is a software for collaborative content management, called a [wiki](https://en.wikipedia.org/wiki/Wiki). The content is stored in a git repository, which keeps track of all data and changes. [Markdown](https://daringfireball.net/projects/markdown) is used as Markup language.
 
 The project is available on [github](https://github.com/redimp/otterwiki).
 It is written in [python](https://www.python.org/) using the microframework [Flask](http://flask.pocoo.org/). [halfmoon](https://www.gethalfmoon.com) is used as CSS framework and [CodeMirror](https://codemirror.net/) as editor. [Font Awesome Free](https://fontawesome.com/license/free) serves the icons. Roboto Font Copyright 2011 Google Inc. All Rights Reserved.
@@ -10,7 +10,7 @@ The [otter logo](https://thenounproject.com/term/otter/27035) is drawn by [Chris
 
 ## License
 
-An Otter Wiki is released under the MIT license.
+Otter知识助手 is released under the MIT license.
 
 Copyright (c) 2018-2025 Ralph Thesen.
 
@@ -22,6 +22,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ### Authors
 
-An Otter Wiki is written and maintained by Ralph Thesen <mail@redimp.de>.
+Otter知识助手 is written and maintained by Ralph Thesen <mail@redimp.de>.
 
 [modeline]: # ( vim: set fenc=utf-8 spell spl=en sts=4 et tw=72: )

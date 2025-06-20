@@ -1,7 +1,7 @@
 apiVersion: v2
 
 name: otterwiki
-description: An Otter Wiki is a minimalstic wiki powered by python, markdown and git.
+description: Otter知识助手 is a minimalstic wiki powered by python, markdown and git.
 home: https://otterwiki.com
 type: application
 version: 0.1.0

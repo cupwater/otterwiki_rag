@@ -1,6 +1,6 @@
 ## Admin Guide
 
-An Otter Wiki can be configured by Admin users who can find <span class="help-button"><span class="btn btn-square btn-sm"><i class="fas fa-cogs"></i></span> Application Preferences</span>, <span class="help-button"><span class="btn btn-square btn-sm"><i class="fas fa-users"></i></span> User management</span> etc. in the sidebar menu of
+Otter知识助手 can be configured by Admin users who can find <span class="help-button"><span class="btn btn-square btn-sm"><i class="fas fa-cogs"></i></span> Application Preferences</span>, <span class="help-button"><span class="btn btn-square btn-sm"><i class="fas fa-users"></i></span> User management</span> etc. in the sidebar menu of
 their <span class="help-button"><span class="btn btn-square btn-sm"><i class="fas fa-ellipsis-v"></i></span> <i class="fas fa-caret-right"></i> <span class="btn btn-square btn-sm"><i class="fas fa-cog"></i></span> Settings</span>.
 
 ### Branding
@@ -12,12 +12,12 @@ configured.
 The <span class="help-button">Site Logo</span> is displayed next to the site
 name, while the <span class="help-button">Site Icon</span> (or favicon) is displayed in the
 browser tab and in bookmarks. Both Site Logo and Site Icon can be attachments.
-An Otter Wikis logo is the default for both.
+Otter知识助手s logo is the default for both.
 
 The <span class="help-button">Site Description</span> is used in the
 `<meta name="description">` tag.
 
-To hide the logo of An Otter Wiki, check <span class="help-button"><input type="checkbox" style="display:inline;" id="hide-logo" checked> Hide logo of an An Otter Wiki n the sidebar</span>. A menu item linking the about information will be added to the <span class="help-button"><span class="btn btn-square btn-sm"><i class="fas fa-ellipsis-v"></i></span></span> menu.
+To hide the logo of Otter知识助手, check <span class="help-button"><input type="checkbox" style="display:inline;" id="hide-logo" checked> Hide logo of an Otter知识助手 n the sidebar</span>. A menu item linking the about information will be added to the <span class="help-button"><span class="btn btn-square btn-sm"><i class="fas fa-ellipsis-v"></i></span></span> menu.
 
 ### User management
 
@@ -68,12 +68,12 @@ or only the directories. Alternatively you choose to not display the Page Index 
 ### Content and Editing Preferences
 
 #### Commit Messages
-Per default An Otter Wiki requires users to add commit messages when updating a
+Per default Otter知识助手 requires users to add commit messages when updating a
 page. You can configure this with the <span class="help-button">Commit Message</span>
 setting. Setting this to `optional` will allow empty commit messages.
 
 #### Page case name
-An Otter Wiki stores pages in files with names of all lowercase names. To retain
+Otter知识助手 stores pages in files with names of all lowercase names. To retain
 the upper and lower case of the filenames, check <span class="help-button"><input type="checkbox" style="display:inline;" id="true-retain-page-name" checked> Retain page name case</span>.
 
 #### Git Web server
@@ -113,7 +113,7 @@ yourself.
 
 ### Mail Preferences
 
-To enable An Otter Wiki to send mails to users registering, resetting their lost
+To enable Otter知识助手 to send mails to users registering, resetting their lost
 password and notify admins about new users, configure the
 <span class="help-button"><span class="btn btn-square btn-sm"><i class="fas fa-envelope"></i></span> Mail Preferences</span>. See the [flask-mail documentation](https://pythonhosted.org/Flask-Mail/) for configuration details.
 

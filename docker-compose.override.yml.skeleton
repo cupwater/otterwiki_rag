@@ -1,7 +1,7 @@
 ---
 #
 # This docker-compose.yml is for building and running the development
-# version of An Otter Wiki.
+# version of Otter知识助手.
 #
 # Please read the Installation guide <https://otterwiki.com/Installation>
 # to get started.

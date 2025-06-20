@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-This is an example plugin for An Otter Wiki
+This is an example plugin for Otter知识助手
 
 The hook is inside a class named NoEmojiPlugin, to make the
 plugin_manager find it, the class has to be registered.

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "otterwiki_noemojis"
-description = "An example plugin for An Otter Wiki that removes all emojis."
+description = "An example plugin for Otter知识助手 that removes all emojis."
 version  = "0.1.0"
 authors = [
     { name = "Ralph Thesen", email = "mail@redimp.de" }

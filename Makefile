@@ -1,6 +1,6 @@
 #
 #
-# Makefile for developing and building An Otter Wiki
+# Makefile for developing and building Otter知识助手
 #
 # Please read the Installation guide <https://otterwiki.com/Installation>
 # to get started.

@@ -1,12 +1,12 @@
 ![](screenshot.png)
 
-# An Otter Wiki
+# Otter知识助手
 
-An Otter Wiki is Python-based software for collaborative content
+Otter知识助手 is Python-based software for collaborative content
 management, called a [wiki](https://en.wikipedia.org/wiki/Wiki). The
 content is stored in a git repository, which keeps track of all changes.
 [Markdown](https://daringfireball.net/projects/markdown) is used as
-Markup language. An Otter Wiki is written in [python](https://www.python.org/)
+Markup language. Otter知识助手 is written in [python](https://www.python.org/)
 using the microframework [Flask](http://flask.pocoo.org/).
 [halfmoon](https://www.gethalfmoon.com) is used as CSS framework
 and [CodeMirror](https://codemirror.net/) as editor.
@@ -60,6 +60,6 @@ services:
 
 ## License
 
-An Otter Wiki is open-source software licensed under the [MIT License](https://github.com/redimp/otterwiki/blob/main/LICENSE).
+Otter知识助手 is open-source software licensed under the [MIT License](https://github.com/redimp/otterwiki/blob/main/LICENSE).
 
 [modeline]: # ( vim: set fenc=utf-8 spell spl=en sts=4 et tw=72: )

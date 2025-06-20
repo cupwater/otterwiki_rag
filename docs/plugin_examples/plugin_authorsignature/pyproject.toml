@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "otterwiki_authorsignature"
-description = "An example plugin for An Otter Wiki that modifies the page view."
+description = "An example plugin for Otter知识助手 that modifies the page view."
 version  = "0.1.0"
 authors = [
     { name = "Ralph Thesen", email = "mail@redimp.de" }

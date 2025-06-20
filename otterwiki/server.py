@@ -23,7 +23,7 @@ app.config.update(
     LOG_LEVEL="INFO",
     REPOSITORY=None,
     SECRET_KEY="CHANGE ME",
-    SITE_NAME="An Otter Wiki",
+    SITE_NAME="Otter知识助手",
     SITE_DESCRIPTION=None,
     SITE_LOGO=None,
     SITE_ICON=None,
@@ -65,7 +65,7 @@ app.config.from_envvar("OTTERWIKI_SETTINGS", silent=True)
 
 # print current version
 print(
-    f"*** Starting An Otter Wiki {__version__} {os.getenv('GIT_TAG', '')}",
+    f"*** Starting Otter知识助手 {__version__} {os.getenv('GIT_TAG', '')}",
     file=sys.stderr,
 )
 

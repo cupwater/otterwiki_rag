@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 Usually chores are not part of the changelog, here an exception is made:
 
 - with [PR233](https://github.com/redimp/otterwiki/pull/233) a pile pf type
-  hints have been introduced into An Otter Wiki which increases the code quality
+  hints have been introduced into Otter知识助手 which increases the code quality
   and should help with further development.
 
 ### Features
@@ -318,7 +318,7 @@ Usually chores are not part of the changelog, here an exception is made:
 - Improved the Edit/Preview implementation, see [#67](https://github.com/redimp/otterwiki/issues/67).
 - Warn user when navigating away from unsaved changes, see [#64](https://github.com/redimp/otterwiki/issues/64).
 - Added auto save (as draft) feature to the editor, see [#66](https://github.com/redimp/otterwiki/issues/66).
-- Added option to hide the logo of An Otter WIki from the Sidebar as discussed in [#127](https://github.com/redimp/otterwiki/discussions/127).
+- Added option to hide the logo of Otter知识助手 from the Sidebar as discussed in [#127](https://github.com/redimp/otterwiki/discussions/127).
 - Improve page view/toc: highlight current position in the toc.
 - Display human friendly timedeltas like "17 minutes and 4 secs ago" in the `title=` of the history and changelog dates.
 

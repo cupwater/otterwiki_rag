@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-This is an example plugin for An Otter Wiki.
+This is an example plugin for Otter知识助手.
 
 The hook is a function that formats and appends some metadata
 to the rendered page html.

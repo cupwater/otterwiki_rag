@@ -1,6 +1,6 @@
 Hello {{name}},
 
-Your account at {{sitename}} (An Otter Wiki) has been approved.
+Your account at {{sitename}} (Otter知识助手) has been approved.
 
 You can log in here: {{url}}
 

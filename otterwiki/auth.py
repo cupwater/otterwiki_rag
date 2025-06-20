@@ -202,7 +202,7 @@ class SimpleAuth:
             abort(404)
         token = serialize(email, salt="confirm-email")
         # generate mail
-        subject = "Request confirmation - {} - An Otter Wiki".format(
+        subject = "Request confirmation - {} - Otter知识助手".format(
             app.config["SITE_NAME"]
         )
         text_body = render_template(
@@ -282,7 +282,7 @@ class SimpleAuth:
             email=email,
             url=url_for("settings", _external=True),
         )
-        subject = "New Account Registration - {} - An Otter Wiki".format(
+        subject = "New Account Registration - {} - Otter知识助手".format(
             app.config["SITE_NAME"]
         )
         send_mail(
@@ -429,7 +429,7 @@ class SimpleAuth:
             # recovery process
             token = serialize(email, salt="lost-password-email")
             # generate mail
-            subject = "Password Recovery - {} - An Otter Wiki".format(
+            subject = "Password Recovery - {} - Otter知识助手".format(
                 app.config["SITE_NAME"]
             )
             text_body = render_template(

@@ -1,6 +1,6 @@
-# An Otter Wiki
+# Otter知识助手
 
-An Otter Wiki is a minimalistic wiki powered by python, markdown and git.
+Otter知识助手 is a minimalistic wiki powered by python, markdown and git.
 
 ## Introduction
 
@@ -31,7 +31,7 @@ After that, to install the chart with the release name `my-otterwiki`, run:
 helm install my-otterwiki --version 0.1.0 otterwiki/otterwiki
 ```
 
-The command deploys An Otter Wiki on the kubernetes cluster in the default namespace
+The command deploys Otter知识助手 on the kubernetes cluster in the default namespace
 with the default configuration. See the [Parameters](#parameters) section for anything
 that can be configured during installation.
 
@@ -66,7 +66,7 @@ The parameters can be specified using `--set key=value[,key=value]` as argument 
 
 ```bash
 helm install my-otterwiki \
-  --set config.SITE_DESCRIPTION="An Otter Wiki deployed with Helm" \
+  --set config.SITE_DESCRIPTION="Otter知识助手 deployed with Helm" \
   --set ingress.enabled=true \
   --set ingress.hosts[0].host="helm.otterwiki.com" \
   --version 0.1.0 \
@@ -77,7 +77,7 @@ Alternatively, you can use a yaml-file to set the parameters, for example when c
 
 ```yaml
 config:
-  SITE_DESCRIPTION: "An Otter Wiki deployed with Helm"
+  SITE_DESCRIPTION: "Otter知识助手 deployed with Helm"
 ingress:
   enabled: true
   hosts:
