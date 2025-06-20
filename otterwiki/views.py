@@ -26,6 +26,7 @@ from otterwiki.renderer import render
 from otterwiki.helper import toast, health_check, get_pagename_prefixes
 from otterwiki.version import __version__
 from otterwiki.util import sanitize_pagename
+from otterwiki.document_parser import parse_uploaded_file
 
 from flask_login import login_required
 
@@ -241,6 +242,20 @@ def pageindex():
 def create():
     pagename = request.form.get("pagename")
     pagename_sanitized = sanitize_pagename(pagename)
+    uploaded_content = None
+    
+    # Handle file upload if present
+    if request.method == "POST" and 'upload_file' in request.files:
+        uploaded_file = request.files['upload_file']
+        if uploaded_file and uploaded_file.filename:
+            # Parse the uploaded file
+            parsed_content, success = parse_uploaded_file(uploaded_file)
+            if success:
+                uploaded_content = parsed_content
+                toast(f"File '{uploaded_file.filename}' parsed successfully.")
+            else:
+                toast(f"Failed to parse file '{uploaded_file.filename}': {parsed_content}", "error")
+    
     if pagename is None:
         # This is the default create page view
         return render_template(
@@ -260,7 +275,7 @@ def create():
     else:
         # this is the creation of a new page
         p = Page(pagename=pagename)
-        return p.create()
+        return p.create(initial_content=uploaded_content)
 
 
 #

@@ -1,7 +1,7 @@
 {# vim: set et ts=8 sts=4 sw=4 ai: #}
 {% extends "form.html" %}
 {% block formcontent %}
-<form action="{{url_for("create")}}" method="POST" class="form-inline">{# class="w-400 mw-full" <!-- w-400 = width: 40rem (400px), mw-full = max-width: 100% --> #}
+<form action="{{url_for("create")}}" method="POST" class="form-inline" enctype="multipart/form-data">{# class="w-400 mw-full" <!-- w-400 = width: 40rem (400px), mw-full = max-width: 100% --> #}
   <div class="form-group mb-10">
     <label for="pagename" class="required w-100">Page name</label>
     <input type="text" class="form-control" name="pagename" id="pagename" placeholder="Page name" required="required" value="{{ pagename if pagename }}" autofocus>
@@ -18,6 +18,18 @@
     </div>
   </div>
   {% endif %}
+  
+  <!-- File upload section -->
+  <div class="form-group mb-10">
+    <label for="upload_file" class="w-100">Upload document (optional)</label>
+    <input type="file" class="form-control" name="upload_file" id="upload_file" 
+           accept=".md,.csv,.txt,.json,.docx,.doc,.xlsx,.xls,.pptx,.ppt,.pdf" 
+           onchange="handleFileSelect(this)">
+    <div class="form-text text-wrap font-italic mt-5">
+        Supported formats: Markdown (.md), CSV (.csv), Text (.txt), JSON (.json), Word (.docx, .doc), Excel (.xlsx, .xls), PowerPoint (.pptx, .ppt), PDF (.pdf)
+    </div>
+  </div>
+  
   <div class="form-group">
     <div class="form-text text-wrap font-italic">
         Hint: Avoid abbreviations. Try to limit your name to three simple words or fewer.
@@ -25,4 +37,25 @@
   </div>
   <input class="btn btn-primary" type="submit" value="Create and open in editor">
 </form>
+
+<script type="text/javascript">
+function handleFileSelect(input) {
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const filename = file.name;
+        const pageNameInput = document.getElementById('pagename');
+        
+        // Auto-suggest page name based on filename if page name is empty
+        if (!pageNameInput.value.trim()) {
+            // Remove file extension and clean up the name
+            let suggestedName = filename.replace(/\.[^/.]+$/, "");
+            // Replace common separators with spaces and clean up
+            suggestedName = suggestedName.replace(/[_-]/g, ' ')
+                                      .replace(/\s+/g, ' ')
+                                      .trim();
+            pageNameInput.value = suggestedName;
+        }
+    }
+}
+</script>
 {% endblock %}

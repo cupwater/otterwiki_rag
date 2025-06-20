@@ -23,7 +23,7 @@ from markupsafe import escape as html_escape
 from werkzeug.http import http_date
 from werkzeug.utils import secure_filename
 
-from otterwiki.auth import current_user, has_permission
+from otterwiki.auth import current_user, has_permission, get_author
 from otterwiki.gitstorage import StorageError, StorageNotFound
 from otterwiki.helper import (
     auto_url,
@@ -715,12 +715,26 @@ class Page:
         # redirect to view
         return redirect(url_for("view", path=self.pagepath))
 
-    def create(self):
+    def create(self, initial_content=None):
         if not has_permission("WRITE"):
             abort(403)
 
         if self.exists:
             toast("{} exists already.".format(self.pagename), "warning")
+
+        # If we have initial content from file upload, save it as a draft
+        if initial_content:
+            # Create content with page title and uploaded content
+            content = f"# {self.pagename}\n\n{initial_content}"
+            
+            # Save as draft so user can review and edit before committing
+            self.save_draft(
+                author=get_author(),
+                content=content,
+                revision="",
+                cursor_line=2,  # Place cursor after the title
+                cursor_ch=0
+            )
 
         return redirect(url_for("edit", path=self.pagepath))
 
