@@ -509,7 +509,8 @@ class Page:
                 {'Content-Type': 'text/plain; charset=utf-8'},
             )
 
-        source = pygments_render(self.content, lang='markdown')
+        # 为源码显示添加行号
+        source = pygments_render(self.content, lang='markdown', linenumbers=True)
         menutree = SidebarPageIndex(get_page_directoryname(self.pagepath))
 
         return render_template(

@@ -36,7 +36,7 @@
                         </span>
                         责任
                     </a>
-{% if has_permission('READ') and not has_permission('WRITE') %}
+{% if has_permission('READ') %}
                     <a href="{{ url_for('source', pagepath=pagepath) }}" class="dropdown-item-with-icon">
                         <span class="dropdown-icon">
                             <i class="fab fa-markdown"></i>

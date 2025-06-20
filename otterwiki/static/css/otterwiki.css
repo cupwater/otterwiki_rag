@@ -462,3 +462,72 @@ mark {
     height: 2.2rem;
     width: 2.2rem;
 }
+
+/* Source code page styles */
+.source-code-container {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-top: 1rem;
+    overflow-x: auto;
+}
+
+.dark-mode .source-code-container {
+    background: #2d3748;
+    border-color: #4a5568;
+}
+
+.source-code-container .highlight {
+    margin: 0;
+    background: transparent;
+}
+
+.source-code-container pre {
+    margin: 0;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.source-code-container .highlighttable {
+    margin: 0;
+    border: none;
+}
+
+.source-code-container .highlighttable td {
+    border: none;
+    padding: 0.2rem 0.5rem;
+}
+
+.source-code-container .highlighttable td.linenos {
+    background: rgba(0, 0, 0, 0.05);
+    border-right: 1px solid #e9ecef;
+    text-align: right;
+    color: #6c757d;
+    font-size: 0.9rem;
+    min-width: 3rem;
+}
+
+.dark-mode .source-code-container .highlighttable td.linenos {
+    background: rgba(255, 255, 255, 0.05);
+    border-right-color: #4a5568;
+    color: #a0aec0;
+}
+
+.source-code-container .highlighttable td.code {
+    padding-left: 1rem;
+}
+
+.source-code-container .highlighttable .linenodiv {
+    padding: 0.2rem 0.5rem;
+}
+
+.source-code-container .highlighttable .linenodiv pre {
+    margin: 0;
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}

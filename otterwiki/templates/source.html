@@ -1,5 +1,26 @@
 {#- vim: set et ts=8 sts=4 sw=4 ai: -#}
 {% extends "page.html" %}
 {% block content %}
-{{source|safe}}
+<div class="w-full mw-full p-0 clearfix">
+    <div class="float-left">
+        <h2 class="m-0">源码 - {{pagename}}</h2>
+        {% if revision %}
+        <p class="text-muted m-0">版本: {{revision}}</p>
+        {% endif %}
+    </div>
+    <div class="float-right">
+        <a href="{{ url_for('view', path=pagepath) }}" class="btn btn-primary" title="返回页面">
+            <i class="fas fa-arrow-left"></i> 返回页面
+        </a>
+        <a href="{{ url_for('source', pagepath=pagepath, raw=1) }}" class="btn" title="查看原始文本">
+            <i class="fas fa-file-alt"></i> 原始文本
+        </a>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="mt-15">
+    <div class="source-code-container">
+        {{source|safe}}
+    </div>
+</div>
 {% endblock %}
