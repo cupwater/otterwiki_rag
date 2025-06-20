@@ -38,7 +38,13 @@ class FolderProcessor:
             # PDF
             '.pdf',
             # Web formats
-            '.html', '.htm'
+            '.html', '.htm',
+            # Code formats (for documentation)
+            '.py', '.js', '.ts', '.css', '.scss',
+            '.java', '.cpp', '.c', '.h',
+            '.xml', '.yaml', '.yml',
+            # Other common formats
+            '.log', '.ini', '.cfg', '.conf'
         }
     
     def process_folder_upload(self, folder_files, base_page_path: str, 
@@ -254,8 +260,11 @@ class FolderProcessor:
         for char in invalid_chars:
             name = name.replace(char, '_')
         
+        # Replace dots with underscores (except for extension dots, which should already be removed)
+        name = name.replace('.', '_')
+        
         # Remove leading/trailing spaces and dots
-        name = name.strip(' .')
+        name = name.strip(' ._')
         
         # Replace multiple spaces/underscores with single underscore
         name = re.sub(r'[_\s]+', '_', name)
