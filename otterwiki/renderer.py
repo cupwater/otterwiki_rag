@@ -301,7 +301,10 @@ class OtterwikiInlineParser(mistune.InlineParser):
             link = link[1:-1]
         elif link.startswith("./"):
             if self.env.get("PAGE_URL", None) is not None:
-                link = self.env["PAGE_URL"] + "/" + link
+                # For images starting with ./, convert to attachment URL format
+                # Remove the ./ prefix and use the attachment path format
+                filename = link[2:]  # Remove "./" prefix
+                link = self.env["PAGE_URL"] + "/a/" + filename
 
         title = m.group(3)
         if title:
