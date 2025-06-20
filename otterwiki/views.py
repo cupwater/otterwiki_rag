@@ -242,19 +242,27 @@ def create():
     pagename = request.form.get("pagename")
     pagename_sanitized = sanitize_pagename(pagename)
     
+    # 检查是否为批量创建模式
+    is_batch_mode = request.args.get("batch") == "1" or request.form.get("upload_type") == "folder"
+    
     if pagename is None:
-        # This is the default create page view
+        # 检查是否有文件上传，自动填充页面名
+        default_pagename = ""
+        if request.method == "GET" and request.args.get("filename"):
+            filename = request.args.get("filename")
+            default_pagename = os.path.splitext(filename)[0]
         return render_template(
             "create.html",
-            title="Create Page",
+            title="批量创建页面" if is_batch_mode else "创建页面",
+            pagename=default_pagename,
             pagename_prefixes=get_pagename_prefixes(),
         )
     elif pagename != pagename_sanitized:
         if pagename is not None and pagename != pagename_sanitized:
-            toast("Please check the pagename ...", "warning")
+            toast("请检查页面名称 ...", "warning")
         return render_template(
             "create.html",
-            title="Create Page",
+            title="批量创建页面" if is_batch_mode else "创建页面",
             pagename=pagename_sanitized,
             pagename_prefixes=get_pagename_prefixes(),
         )
@@ -262,40 +270,97 @@ def create():
         # this is the creation of a new page
         p = Page(pagename=pagename)
         
-        # Check if a file was uploaded
-        uploaded_file = request.files.get("file")
-        if uploaded_file and uploaded_file.filename:
-            from otterwiki.file_parser import parse_uploaded_file
-            
-            try:
-                # Get the page directory path for saving embedded images
-                page_dir = os.path.join(storage.path, p.pagepath)
-                
-                # Parse the uploaded file with page path for image handling
-                markdown_content = parse_uploaded_file(uploaded_file, uploaded_file.filename, page_dir)
-                
-                if markdown_content:
-                    # Create the page with the parsed content
-                    import otterwiki.auth
-                    author = otterwiki.auth.get_author()
-                    
-                    # Save the page with the parsed content
-                    storage.store(
-                        filename=p.filename,
-                        content=markdown_content,
-                        message=f"Created from uploaded file: {uploaded_file.filename}",
-                        author=author,
-                    )
-                    
-                    toast(f"Page created successfully from {uploaded_file.filename}")
-                    return redirect(url_for("view", path=p.pagepath))
-                else:
-                    toast(f"Unsupported file format: {uploaded_file.filename}", "warning")
-            except Exception as e:
-                app.logger.error(f"Error processing uploaded file: {str(e)}")
-                toast("Error processing uploaded file. Creating empty page instead.", "error")
+        # Check upload type
+        upload_type = request.form.get("upload_type", "none")
         
-        # If no file or file processing failed, proceed with normal creation
+        if upload_type == "file":
+            # Handle single file upload
+            uploaded_file = request.files.get("file")
+            if uploaded_file and uploaded_file.filename:
+                from otterwiki.file_parser import parse_uploaded_file
+                try:
+                    # 自动用文件名（不含扩展名）作为页面名
+                    auto_pagename = os.path.splitext(uploaded_file.filename)[0]
+                    if not pagename or pagename.strip() == "":
+                        pagename = auto_pagename
+                        pagename_sanitized = sanitize_pagename(pagename)
+                        p = Page(pagename=pagename_sanitized)
+                    # Get the page directory path for saving embedded images
+                    page_dir = os.path.join(storage.path, p.pagepath)
+                    # Parse the uploaded file with page path for image handling
+                    markdown_content = parse_uploaded_file(uploaded_file, uploaded_file.filename, page_dir)
+                    if markdown_content:
+                        import otterwiki.auth
+                        author = otterwiki.auth.get_author()
+                        storage.store(
+                            filename=p.filename,
+                            content=markdown_content,
+                            message=f"Created from uploaded file: {uploaded_file.filename}",
+                            author=author,
+                        )
+                        toast(f"页面已由 {uploaded_file.filename} 创建")
+                        return redirect(url_for("view", path=p.pagepath))
+                    else:
+                        toast(f"不支持的文件格式: {uploaded_file.filename}", "warning")
+                except Exception as e:
+                    app.logger.error(f"处理上传文件出错: {str(e)}")
+                    toast("处理上传文件出错，已创建空白页面。", "error")
+        elif upload_type == "folder":
+            # Handle folder upload
+            folder_files = request.files.getlist("folder")
+            if folder_files and any(f.filename for f in folder_files):
+                from otterwiki.folder_processor import process_folder_upload
+                try:
+                    # 使用存储根目录作为基础路径
+                    base_page_dir = storage.path
+                    success, message, created_pages = process_folder_upload(
+                        folder_files, base_page_dir, pagename
+                    )
+                    if success:
+                        import otterwiki.auth
+                        author = otterwiki.auth.get_author()
+                        
+                        # 创建所有页面
+                        created_count = 0
+                        for file_path, page_info in created_pages.items():
+                            try:
+                                # 使用完整的页面名称创建页面
+                                full_page_name = page_info['full_page_name']
+                                page = Page(pagename=full_page_name)
+                                
+                                # 保存页面到git版本控制
+                                storage.store(
+                                    filename=page.filename,
+                                    content=page_info['content'],
+                                    message=f"Created from folder upload: {file_path}",
+                                    author=author,
+                                )
+                                
+                                created_count += 1
+                                app.logger.info(f"Created page: {full_page_name}")
+                                
+                            except Exception as e:
+                                app.logger.error(f"Error creating page for {file_path}: {str(e)}")
+                                # 继续处理其他文件，不中断整个流程
+                        
+                        # 显示成功消息
+                        if created_count > 0:
+                            toast(f"成功批量创建 {created_count} 个页面")
+                            # 跳转到第一个创建的页面
+                            first_page = list(created_pages.values())[0]
+                            first_page_name = first_page['full_page_name']
+                            return redirect(url_for("view", path=first_page_name))
+                        else:
+                            toast("批量创建完成，但未找到可处理的文件")
+                            return redirect(url_for("index"))
+                    else:
+                        toast(message, "error")
+                        
+                except Exception as e:
+                    app.logger.error(f"Error processing folder upload: {str(e)}")
+                    toast("处理文件夹上传时出错。", "error")
+            else:
+                toast("未选择要上传的文件夹。", "warning")
         return p.create()
 
 

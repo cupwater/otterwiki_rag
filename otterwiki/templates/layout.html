@@ -8,7 +8,7 @@
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
   <meta name="viewport" content="width=device-width" />
 {# meta preview block [[ #}
-  <meta property="og:title" content="{%if title%}{{title}} - {%endif%}{%if config.SITE_NAME %}{{config.SITE_NAME}}{%else%}水獭维基{%endif%}" />
+  <meta property="og:title" content="{%if title%}{{title}} - {%endif%}{%if config.SITE_NAME %}{{config.SITE_NAME}}{%else%}知识助手{%endif%}" />
   <meta property="og:type" content="website" />
 {%- if pagepath %}
   <meta property="og:url" content="{{ url_for('view', path=pagepath, _external=True) }}" />
@@ -29,7 +29,7 @@
     <link rel="icon" href="{{ url_for("static", filename="img/otter-favicon2.png") }}">
 {%- endif %}
 {% block title %}
-    <title>{%if title%}{{title}} &ndash; {%endif%}{%if config.SITE_NAME %}{{config.SITE_NAME}}{%else%}水獭维基{%endif%}</title>
+    <title>{%if title%}{{title}} &ndash; {%endif%}{%if config.SITE_NAME %}{{config.SITE_NAME}}{%else%}知识助手{%endif%}</title>
 {% endblock %}
     <link href="{{ url_for("static", filename="css/halfmoon.min.css") | debug_unixtime }}" rel="stylesheet" media="screen" />
     <!-- Otterwiki CSS -->
@@ -112,7 +112,7 @@
                         <span class="dropdown-icon">
                             <img width="26" src="{{ url_for("static", filename="img/otterhead.png") }}" >
                         </span>
-                        关于水獭维基
+                        关于知识助手
                     </a>
 {% endif %}
 {% if has_permission('READ') %}
@@ -175,7 +175,7 @@
             <div class="sidebar-otter" >
                 <a href=" {{ url_for("about") }}" class="sidebar-link">
                 <img class="sidebar-logo" src="{{ url_for("static", filename="img/otter.png") | debug_unixtime }}" alt=""/><br/>
-                水獭维基
+                知识助手
                 </a>
             </div>
             {% endif %}
@@ -247,7 +247,7 @@
   {% endfor %}
 {% endwith %}
 </script>
-  <!-- custom js for tweaking an otter wiki -->
+  <!-- custom js for tweaking 知识助手 -->
   <script src="{{ url_for("static", filename="custom/custom.js") }}"></script>
   <!-- custom HTML -->
   {{config.HTML_EXTRA_BODY|safe}}

@@ -10,7 +10,7 @@
 {##}
   <div class="form-group">
     <label for="site_name" class="required">Site Name</label>
-    <input name="site_name" type="text" placeholder="An Otter Wiki" class="form-control" id="site_name" value="{{ config.SITE_NAME or "" }}">
+    <input name="site_name" type="text" placeholder="知识助手" class="form-control" id="site_name" value="{{ config.SITE_NAME or "" }}">
     <div class="form-text">
       The name of the site, displayed on the top left of the page and in the subject of all emails.
     </div>
@@ -57,10 +57,10 @@
   <div class="form-group">
     <div class="custom-checkbox">
       <input {%if config.HIDE_LOGO %}checked{% endif %} type="checkbox" id="hide_logo" name="hide_logo" value="True">
-      <label for="hide_logo">Hide the logo of An Otter Wiki in the sidebar.</label>
+      <label for="hide_logo">隐藏侧边栏中的知识助手Logo。</label>
     </div>
     <div class="form-text">
-        An Otter Wiki logo will not be shown.
+        知识助手logo将不会显示。
     </div>
   </div>
 {##}

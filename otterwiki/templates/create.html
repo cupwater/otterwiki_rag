@@ -19,10 +19,29 @@
   </div>
   {% endif %}
   
-  <!-- File upload section -->
+  <!-- Upload type selection -->
   <div class="form-group mb-10">
     <div class="w-100">
-      <label class="form-label">从文件创建（可选）</label>
+      <label class="form-label">上传类型</label>
+      <div class="custom-radio d-inline-block mr-10">
+        <input type="radio" id="upload-type-none" name="upload_type" value="none" {% if not request.args.get('batch') %}checked{% endif %} onchange="toggleUploadSections()">
+        <label for="upload-type-none">创建空页面</label>
+      </div>
+      <div class="custom-radio d-inline-block mr-10">
+        <input type="radio" id="upload-type-file" name="upload_type" value="file" onchange="toggleUploadSections()">
+        <label for="upload-type-file">上传文件</label>
+      </div>
+      <div class="custom-radio d-inline-block">
+        <input type="radio" id="upload-type-folder" name="upload_type" value="folder" {% if request.args.get('batch') %}checked{% endif %} onchange="toggleUploadSections()">
+        <label for="upload-type-folder">批量创建（上传文件夹）</label>
+      </div>
+    </div>
+  </div>
+  
+  <!-- File upload section -->
+  <div class="form-group mb-10" id="file-upload-section" style="display: none;">
+    <div class="w-100">
+      <label class="form-label">从文件创建</label>
       <div class="form-text mb-5">
         上传文件以自动生成页面内容。支持 Markdown、CSV、TXT、JSON、DOCX、DOC、Excel、PPT、PDF 文件。
       </div>
@@ -33,11 +52,81 @@
     </div>
   </div>
   
+  <!-- Folder upload section -->
+  <div class="form-group mb-10" id="folder-upload-section" style="display: none;">
+    <div class="w-100">
+      <label class="form-label">批量创建页面</label>
+      <div class="form-text mb-5">
+        上传文件夹以批量创建页面。文件夹内的每个文件将创建一个对应的页面，文件名作为页面名称。
+      </div>
+      <div class="custom-file">
+        <input name="folder" type="file" id="folder-upload" webkitdirectory directory multiple>
+        <label for="folder-upload">选择要上传的文件夹</label>
+      </div>
+      <div id="folder-preview" class="mt-10" style="display: none;">
+        <div class="form-text">文件夹内容预览：</div>
+        <div id="folder-structure" class="border p-10" style="max-height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px;"></div>
+      </div>
+    </div>
+  </div>
+  
   <div class="form-group">
     <div class="form-text text-wrap font-italic">
         提示：避免使用缩写。尝试将名称限制在三个简单词汇以内。
     </div>
   </div>
-  <input class="btn btn-primary" type="submit" value="创建并在编辑器中打开">
+  <input class="btn btn-primary" type="submit" value="{% if request.args.get('batch') %}批量创建页面{% else %}创建并在编辑器中打开{% endif %}">
 </form>
+
+<script>
+function toggleUploadSections() {
+    const uploadType = document.querySelector('input[name="upload_type"]:checked').value;
+    const fileSection = document.getElementById('file-upload-section');
+    const folderSection = document.getElementById('folder-upload-section');
+    
+    // Hide all sections first
+    fileSection.style.display = 'none';
+    folderSection.style.display = 'none';
+    
+    // Show selected section
+    if (uploadType === 'file') {
+        fileSection.style.display = 'block';
+    } else if (uploadType === 'folder') {
+        folderSection.style.display = 'block';
+    }
+}
+
+// Handle folder upload preview
+document.getElementById('folder-upload').addEventListener('change', function(e) {
+    const files = e.target.files;
+    const preview = document.getElementById('folder-preview');
+    const structure = document.getElementById('folder-structure');
+    
+    if (files.length > 0) {
+        const fileList = Array.from(files).map(file => file.webkitRelativePath || file.name);
+        const structureText = fileList.join('\n');
+        structure.textContent = structureText;
+        preview.style.display = 'block';
+    } else {
+        preview.style.display = 'none';
+    }
+});
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    toggleUploadSections();
+});
+
+// 自动填充页面名为上传文件名（不含扩展名）
+document.getElementById('file-upload').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const name = file.name.replace(/\.[^.]+$/, '');
+        const pagenameInput = document.getElementById('pagename');
+        if (pagenameInput && (!pagenameInput.value || pagenameInput.value.trim() === '')) {
+            pagenameInput.value = name;
+        }
+    }
+});
+</script>
 {% endblock %}

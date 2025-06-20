@@ -34,7 +34,13 @@
                     <span class="sidebar-icon">
                         <i class="far fa-file"></i>
                     </span>
-                    Create page
+                    创建页面
+                </a>
+                <a href="{{ url_for("create") }}?batch=1" id="batch-create-page-btn" class="sidebar-link sidebar-link-with-icon">
+                    <span class="sidebar-icon">
+                        <i class="fas fa-folder-plus"></i>
+                    </span>
+                    批量创建
                 </a>
 {% endif %}
 {%- if config.SIDEBAR_SHORTCUTS.split()|length > 0 %}
@@ -51,7 +57,13 @@
                         <span class="dropdown-icon">
                             <i class="far fa-file"></i>
                         </span>
-                    Create page
+                    创建页面
+                    </a>
+                    <a href="{{ url_for("create") }}?batch=1" class="dropdown-item-with-icon" id="batch-create-page-btn">
+                        <span class="dropdown-icon">
+                            <i class="fas fa-folder-plus"></i>
+                        </span>
+                    批量创建
                     </a>
 {% endif %}
 {% if has_permission('READ') and not "pageindex" in config.SIDEBAR_SHORTCUTS.lower().split() %}
