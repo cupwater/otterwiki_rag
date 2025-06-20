@@ -1,7 +1,7 @@
 {# vim: set et ts=8 sts=4 sw=4 ai: #}
 {% extends "form.html" %}
 {% block formcontent %}
-<form action="{{url_for("create")}}" method="POST" class="form-inline">{# class="w-400 mw-full" <!-- w-400 = width: 40rem (400px), mw-full = max-width: 100% --> #}
+<form action="{{url_for("create")}}" method="POST" class="form-inline" enctype="multipart/form-data">{# class="w-400 mw-full" <!-- w-400 = width: 40rem (400px), mw-full = max-width: 100% --> #}
   <div class="form-group mb-10">
     <label for="pagename" class="required w-100">Page name</label>
     <input type="text" class="form-control" name="pagename" id="pagename" placeholder="Page name" required="required" value="{{ pagename if pagename }}" autofocus>
@@ -18,6 +18,21 @@
     </div>
   </div>
   {% endif %}
+  
+  <!-- File upload section -->
+  <div class="form-group mb-10">
+    <div class="w-100">
+      <label class="form-label">Create from file (optional)</label>
+      <div class="form-text mb-5">
+        Upload a file to automatically generate page content. Supports markdown, CSV, TXT, JSON, DOCX, DOC, Excel, PPT, PDF files.
+      </div>
+      <div class="custom-file">
+        <input name="file" type="file" id="file-upload" accept=".md,.markdown,.csv,.txt,.json,.docx,.doc,.xls,.xlsx,.ppt,.pptx,.pdf">
+        <label for="file-upload">Choose file to upload and parse</label>
+      </div>
+    </div>
+  </div>
+  
   <div class="form-group">
     <div class="form-text text-wrap font-italic">
         Hint: Avoid abbreviations. Try to limit your name to three simple words or fewer.

@@ -12,7 +12,7 @@ from flask import (
     redirect,
     url_for,
 )
-from otterwiki.server import app, githttpserver
+from otterwiki.server import app, githttpserver, storage
 from otterwiki.wiki import (
     Page,
     PageIndex,
@@ -241,6 +241,7 @@ def pageindex():
 def create():
     pagename = request.form.get("pagename")
     pagename_sanitized = sanitize_pagename(pagename)
+    
     if pagename is None:
         # This is the default create page view
         return render_template(
@@ -260,6 +261,38 @@ def create():
     else:
         # this is the creation of a new page
         p = Page(pagename=pagename)
+        
+        # Check if a file was uploaded
+        uploaded_file = request.files.get("file")
+        if uploaded_file and uploaded_file.filename:
+            from otterwiki.file_parser import parse_uploaded_file
+            
+            try:
+                # Parse the uploaded file
+                markdown_content = parse_uploaded_file(uploaded_file, uploaded_file.filename)
+                
+                if markdown_content:
+                    # Create the page with the parsed content
+                    import otterwiki.auth
+                    author = otterwiki.auth.get_author()
+                    
+                    # Save the page with the parsed content
+                    storage.store(
+                        filename=p.filename,
+                        content=markdown_content,
+                        message=f"Created from uploaded file: {uploaded_file.filename}",
+                        author=author,
+                    )
+                    
+                    toast(f"Page created successfully from {uploaded_file.filename}")
+                    return redirect(url_for("view", path=p.pagepath))
+                else:
+                    toast(f"Unsupported file format: {uploaded_file.filename}", "warning")
+            except Exception as e:
+                app.logger.error(f"Error processing uploaded file: {str(e)}")
+                toast("Error processing uploaded file. Creating empty page instead.", "error")
+        
+        # If no file or file processing failed, proceed with normal creation
         return p.create()
 
 
