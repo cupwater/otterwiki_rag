@@ -1,0 +1,25 @@
+{
+  "project": "OtterWiki File Upload Feature",
+  "version": "1.0.0",
+  "description": "This feature allows users to upload files and automatically parse them into markdown content when creating wiki pages.",
+  "supported_formats": [
+    "markdown",
+    "csv", 
+    "txt",
+    "json",
+    "docx",
+    "doc",
+    "excel",
+    "ppt",
+    "pdf"
+  ],
+  "dependencies": {
+    "docling": ">=2.37.0"
+  },
+  "features": {
+    "auto_parsing": true,
+    "markdown_conversion": true,
+    "table_generation": true,
+    "error_handling": true
+  }
+}
