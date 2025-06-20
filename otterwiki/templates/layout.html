@@ -1,6 +1,6 @@
 {#- vim: set et ts=8 sts=4 sw=4 ai: -#}
 <!DOCTYPE html>
-<html lang="en" class="auto-scaling-disabled">
+<html lang="zh-CN" class="auto-scaling-disabled">
 <head>
   <!-- Meta tags -->
   <meta charset="utf-8" />
@@ -8,14 +8,14 @@
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
   <meta name="viewport" content="width=device-width" />
 {# meta preview block [[ #}
-  <meta property="og:title" content="{%if title%}{{title}} - {%endif%}{%if config.SITE_NAME %}{{config.SITE_NAME}}{%else%}An Otter Wiki{%endif%}" />
+  <meta property="og:title" content="{%if title%}{{title}} - {%endif%}{%if config.SITE_NAME %}{{config.SITE_NAME}}{%else%}水獭维基{%endif%}" />
   <meta property="og:type" content="website" />
 {%- if pagepath %}
   <meta property="og:url" content="{{ url_for('view', path=pagepath, _external=True) }}" />
 {%- else %}
   <meta property="og:url" content="{{ url_for("index", _external=True) }}" />
 {%- endif %}
-  <meta property="og:description" content="{%if description%}{{description}}{%elif config.SITE_DESCRIPTION %}{{config.SITE_DESCRIPTION}}{%else%}A minimalistic wiki powered by python, markdown and git.{%endif%}" />
+  <meta property="og:description" content="{%if description%}{{description}}{%elif config.SITE_DESCRIPTION %}{{config.SITE_DESCRIPTION}}{%else%}一个基于Python、Markdown和Git的简约维基系统。{%endif%}" />
 {%- if config.SITE_LOGO %}
   <meta property="og:image" content="{{ config.SITE_LOGO }}" />
 {%- else %}
@@ -29,7 +29,7 @@
     <link rel="icon" href="{{ url_for("static", filename="img/otter-favicon2.png") }}">
 {%- endif %}
 {% block title %}
-    <title>{%if title%}{{title}} &ndash; {%endif%}{%if config.SITE_NAME %}{{config.SITE_NAME}}{%else%}An Otter Wiki{%endif%}</title>
+    <title>{%if title%}{{title}} &ndash; {%endif%}{%if config.SITE_NAME %}{{config.SITE_NAME}}{%else%}水獭维基{%endif%}</title>
 {% endblock %}
     <link href="{{ url_for("static", filename="css/halfmoon.min.css") | debug_unixtime }}" rel="stylesheet" media="screen" />
     <!-- Otterwiki CSS -->
@@ -77,11 +77,11 @@
         <!-- Navbar start -->
         <nav class="navbar">
             <div class="navbar-content relative">
-                <button id="toggle-sidebar-btn" class="btn btn-action" type="button" onclick="halfmoon.toggleSidebar()" title="Toggle Sidebar ([)">
+                <button id="toggle-sidebar-btn" class="btn btn-action" type="button" onclick="halfmoon.toggleSidebar()" title="切换侧边栏 ([)">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
-            <a href="{{ url_for("index") }}" class="navbar-brand ml-10 ml-sm-20" title="{%if description%}{{description}}{%elif config.SITE_DESCRIPTION %}{{config.SITE_DESCRIPTION}}{%else%}A minimalistic wiki powered by python, markdown and git.{%endif%}">
+            <a href="{{ url_for("index") }}" class="navbar-brand ml-10 ml-sm-20" title="{%if description%}{{description}}{%elif config.SITE_DESCRIPTION %}{{config.SITE_DESCRIPTION}}{%else%}一个基于Python、Markdown和Git的简约维基系统。{%endif%}">
 {%- if config.SITE_LOGO %}
                 <img src="{{ config.SITE_LOGO }}" alt="" id="site_logo"/>
 {%- else %}
@@ -95,7 +95,7 @@
 {% block navbarsearch %}
                 <form action="{{ url_for("search") }}" method="post" class="relative">
                 <span class="top-search">
-                <input id="search-query" name="query" type="text" class="form-control mr-5" placeholder="Search" style="padding-right: 3.5rem;">
+                <input id="search-query" name="query" type="text" class="form-control mr-5" placeholder="搜索" style="padding-right: 3.5rem;">
                 </span>
                 </form>
 {% endblock %}
@@ -112,7 +112,7 @@
                         <span class="dropdown-icon">
                             <img width="26" src="{{ url_for("static", filename="img/otterhead.png") }}" >
                         </span>
-                        About An Otter Wiki
+                        关于水獭维基
                     </a>
 {% endif %}
 {% if has_permission('READ') %}
@@ -122,7 +122,7 @@
                         <span class="dropdown-icon">
                             <i class="far fa-moon"></i>
                         </span>
-                        Toggle dark mode
+                        切换深色模式
                     </a>
 
 {% if not current_user.is_authenticated %}
@@ -130,21 +130,21 @@
                         <span class="dropdown-icon">
                             <i class="fas fa-sign-in-alt"></i>
                         </span>
-                        Login
+                        登录
                     </a>
 {% else %}
                     <a href="{{ url_for("settings") }}" class="dropdown-item-with-icon">
                         <span class="dropdown-icon">
                             <i class="fas fa-cog"></i>
                         </span>
-                        Settings
+                        设置
                     </a>
   {% if auth_supported_features['logout'] %}
                     <a href="{{ url_for("logout") }}"  class="dropdown-item-with-icon">
                         <span class="dropdown-icon">
                             <i class="fas fa-sign-out-alt"></i>
                         </span>
-                        Logout
+                        退出
                     </a>
   {% endif %}
 {% endif %}
@@ -175,7 +175,7 @@
             <div class="sidebar-otter" >
                 <a href=" {{ url_for("about") }}" class="sidebar-link">
                 <img class="sidebar-logo" src="{{ url_for("static", filename="img/otter.png") | debug_unixtime }}" alt=""/><br/>
-                An Otter Wiki
+                水獭维基
                 </a>
             </div>
             {% endif %}

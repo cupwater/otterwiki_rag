@@ -268,8 +268,11 @@ def create():
             from otterwiki.file_parser import parse_uploaded_file
             
             try:
-                # Parse the uploaded file
-                markdown_content = parse_uploaded_file(uploaded_file, uploaded_file.filename)
+                # Get the page directory path for saving embedded images
+                page_dir = os.path.join(storage.path, p.pagepath)
+                
+                # Parse the uploaded file with page path for image handling
+                markdown_content = parse_uploaded_file(uploaded_file, uploaded_file.filename, page_dir)
                 
                 if markdown_content:
                     # Create the page with the parsed content

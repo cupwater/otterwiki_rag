@@ -6,36 +6,36 @@
 {% block content %}
 <div class="w-600 mw-full">
 <div class="card">
-  <h2 class="card-title">Search</h2>
+  <h2 class="card-title">搜索</h2>
   <form action="{{url_for("search")}}" method="POST" class="form-inline">
   <div class="form-group">
-    <input type="text" class="form-control" name="query" id="search-query" placeholder="Search term" value="{{query if query}}" autofocus onfocus="this.setSelectionRange(this.value.length,this.value.length);">
+    <input type="text" class="form-control" name="query" id="search-query" placeholder="搜索关键词" value="{{query if query}}" autofocus onfocus="this.setSelectionRange(this.value.length,this.value.length);">
   </div>
 {#
   <div class="form-group">
     <div class="form-text">
-        <strong>Hint:</strong>&nbsp;Avoid abbreviations. Try to limit your name to three simple words or fewer.
+        <strong>提示:</strong>&nbsp;避免使用缩写。尝试将名称限制在三个简单词汇以内。
     </div>
   </div>
 #}
   <div class="form-group">
   <div class="custom-checkbox d-inline-block mr-10">
     <input type="checkbox" id="is_casesensitive" name="is_casesensitive" value="y" {{"checked" if is_casesensitive}}>
-    <label for="is_casesensitive">Match case</label>
+    <label for="is_casesensitive">区分大小写</label>
   </div>
   <div class="custom-checkbox d-inline-block mr-10">
     <input type="checkbox" id="regexp" name="is_regexp" value="y" {{"checked" if is_regexp}}>
-    <label for="regexp">Regular expression</label>
+    <label for="regexp">正则表达式</label>
   </div>
 {#
   <div class="custom-checkbox d-inline-block">
     <input type="checkbox" id="in_history" name="in_history" value="y" {{"checked" if in_history}}>
-    <label for="in_history">Search in history</label>
+    <label for="in_history">在历史中搜索</label>
   </div>
 #}
   </div>
   <div class="form-group">
-    <input class="btn btn-primary" type="submit" value="Search">
+    <input class="btn btn-primary" type="submit" value="搜索">
   </div>
 </form>
 </div>{# card #}
@@ -43,15 +43,15 @@
 {#
 #}
 {% if result %}
-<h1 class="content-title">Search matched {{keys | length}} page{%if keys | length >1%}s{%endif%}:</h1>
+<h1 class="content-title">搜索匹配到 {{keys | length}} 个页面{%if keys | length >1%}{%endif%}:</h1>
 {% for key in keys %}
 <h2 class="content-title mt-20"><a href="{{ url_for('view', path=key[3]) }}">{{key[4]|safe}}</a>
 {%- if key[0] == key[1] == 1 %}
-(Name matches)
+(名称匹配)
 {% elif key[0] == 1  %}
-(Name and {{key[1] - 1}} match{%if key[1] -1 != 1%}es{%endif%} found)</h2>
+(名称和 {{key[1] - 1}} 个匹配{%if key[1] -1 != 1%}项{%endif%}找到)</h2>
 {% else %}
-({{key[1]}} match{%if key[1]!=1%}es{%endif%} found)</h2>
+({{key[1]}} 个匹配{%if key[1]!=1%}项{%endif%}找到)</h2>
 {% endif -%}
 {% for match in result[key] %}
 {%- if match -%}
@@ -60,6 +60,6 @@
 {%- endfor -%}
 {% endfor %}
 {% else %}
-<h1 class="content-title">No match found.</h1>
+<h1 class="content-title">未找到匹配结果。</h1>
 {% endif %}
 {% endblock %}
