@@ -92,8 +92,13 @@ class FolderProcessor:
         """
         file_structure = {}
         
+        if current_app:
+            current_app.logger.info(f"开始提取文件夹文件，共 {len(folder_files)} 个文件")
+        
         for file_storage in folder_files:
             if not file_storage.filename:
+                if current_app:
+                    current_app.logger.warning("跳过空文件名的文件")
                 continue
                 
             # Get the relative path from the folder
@@ -110,7 +115,10 @@ class FolderProcessor:
             file_structure[relative_path] = temp_file_path
             
             if current_app:
-                current_app.logger.info(f"提取文件: {relative_path}")
+                current_app.logger.info(f"提取文件: {relative_path} -> {temp_file_path}")
+        
+        if current_app:
+            current_app.logger.info(f"文件提取完成，共提取 {len(file_structure)} 个文件")
         
         return file_structure
     
@@ -130,13 +138,27 @@ class FolderProcessor:
         """
         created_pages = {}
         
+        if current_app:
+            current_app.logger.info(f"开始处理文件夹结构，共 {len(file_structure)} 个文件")
+        
         # 遍历所有文件，将每个文件作为独立的页面
         for file_path, temp_file_path in file_structure.items():
+            if current_app:
+                current_app.logger.info(f"处理文件: {file_path}")
+            
             page_info = self._create_page_from_file(
                 file_path, temp_file_path, base_page_path
             )
             if page_info:
                 created_pages[file_path] = page_info
+                if current_app:
+                    current_app.logger.info(f"成功创建页面信息: {file_path} -> {page_info['full_page_name']}")
+            else:
+                if current_app:
+                    current_app.logger.warning(f"无法为文件创建页面: {file_path}")
+        
+        if current_app:
+            current_app.logger.info(f"文件夹结构处理完成，成功创建 {len(created_pages)} 个页面")
         
         return created_pages
     
@@ -199,11 +221,18 @@ class FolderProcessor:
                 # 文件在子目录中，创建对应的页面目录
                 page_dir_path = os.path.join(base_page_path, file_dir)
                 # 页面名称包含目录路径
-                full_page_name = f"{file_dir}/{page_name}"
+                base_full_page_name = f"{file_dir}/{page_name}"
             else:
                 # 文件在根目录
                 page_dir_path = base_page_path
-                full_page_name = page_name
+                base_full_page_name = page_name
+            
+            # 生成唯一的页面名称
+            unique_page_name = self._generate_unique_pagename(page_name, file_dir)
+            if file_dir and file_dir != ".":
+                full_page_name = f"{file_dir}/{unique_page_name}"
+            else:
+                full_page_name = unique_page_name
             
             # Parse the file content
             markdown_content = self.file_parser.parse_file(temp_file_path, filename, page_dir_path)
@@ -215,7 +244,7 @@ class FolderProcessor:
             
             # Create the page
             page_info = {
-                'page_name': page_name,
+                'page_name': unique_page_name,
                 'full_page_name': full_page_name,
                 'file_path': file_path,
                 'content': markdown_content,
@@ -231,6 +260,56 @@ class FolderProcessor:
             if current_app:
                 current_app.logger.error(f"创建页面失败 {file_path}: {str(e)}")
             return None
+    
+    def _generate_unique_pagename(self, base_pagename: str, pagepath: str = "") -> str:
+        """
+        生成唯一的页面名称，如果存在同名文件则添加序号
+        
+        Args:
+            base_pagename: 基础页面名称（不含序号）
+            pagepath: 页面路径前缀
+            
+        Returns:
+            唯一的页面名称
+        """
+        from otterwiki.wiki import Page
+        from otterwiki.util import sanitize_pagename
+        from datetime import datetime
+        
+        # 清理基础页面名称
+        base_pagename = sanitize_pagename(base_pagename)
+        
+        # 如果页面路径不为空，构建完整路径
+        if pagepath:
+            full_pagepath = f"{pagepath}/{base_pagename}"
+        else:
+            full_pagepath = base_pagename
+        
+        # 检查基础名称是否已存在
+        test_page = Page(pagename=full_pagepath)
+        if not test_page.exists:
+            return base_pagename
+        
+        # 如果存在，开始添加序号
+        counter = 1
+        while True:
+            numbered_pagename = f"{base_pagename}_{counter}"
+            if pagepath:
+                test_full_pagepath = f"{pagepath}/{numbered_pagename}"
+            else:
+                test_full_pagepath = numbered_pagename
+            
+            test_page = Page(pagename=test_full_pagepath)
+            if not test_page.exists:
+                return numbered_pagename
+            
+            counter += 1
+            
+            # 防止无限循环
+            if counter > 1000:
+                # 如果序号太大，使用时间戳
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                return f"{base_pagename}_{timestamp}"
     
     def _is_supported_file(self, filename: str) -> bool:
         """

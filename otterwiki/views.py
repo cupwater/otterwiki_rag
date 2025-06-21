@@ -2,6 +2,10 @@
 # vim: set et ts=8 sts=4 sw=4 ai:
 
 import os
+import re
+import tempfile
+from datetime import datetime, timezone
+from typing import Dict, List, Optional, Tuple
 
 from flask import (
     request,
@@ -11,6 +15,11 @@ from flask import (
     make_response,
     redirect,
     url_for,
+    current_app,
+    flash,
+    jsonify,
+    send_file,
+    session,
 )
 from otterwiki.server import app, githttpserver, storage
 from otterwiki.wiki import (
@@ -23,9 +32,9 @@ from otterwiki.wiki import (
 import otterwiki.auth
 import otterwiki.preferences
 from otterwiki.renderer import render
-from otterwiki.helper import toast, health_check, get_pagename_prefixes
+from otterwiki.helper import toast, health_check, get_pagename_prefixes, get_attachment_directoryname, get_filename, get_page_directoryname, get_pagename, get_pagepath, sanitize_pagename, split_path, upsert_pagecrumbs
 from otterwiki.version import __version__
-from otterwiki.util import sanitize_pagename
+from otterwiki.util import UTC
 
 from flask_login import login_required
 
@@ -282,7 +291,9 @@ def create():
                     # 自动用文件名（不含扩展名）作为页面名
                     auto_pagename = os.path.splitext(uploaded_file.filename)[0]
                     if not pagename or pagename.strip() == "":
-                        pagename = auto_pagename
+                        # 使用generate_unique_pagename生成唯一的页面名称
+                        unique_pagename = generate_unique_pagename(auto_pagename, "")
+                        pagename = unique_pagename
                         pagename_sanitized = sanitize_pagename(pagename)
                         p = Page(pagename=pagename_sanitized)
                     # Get the page directory path for saving embedded images
@@ -308,14 +319,26 @@ def create():
         elif upload_type == "folder":
             # Handle folder upload
             folder_files = request.files.getlist("folder")
+            app.logger.info(f"文件夹上传: 接收到 {len(folder_files)} 个文件")
+            
             if folder_files and any(f.filename for f in folder_files):
+                # 记录所有文件名
+                for i, f in enumerate(folder_files):
+                    app.logger.info(f"文件 {i+1}: {f.filename}")
+                
                 from otterwiki.folder_processor import process_folder_upload
                 try:
                     # 使用存储根目录作为基础路径
                     base_page_dir = storage.path
+                    app.logger.info(f"开始处理文件夹上传，基础路径: {base_page_dir}")
+                    
                     success, message, created_pages = process_folder_upload(
                         folder_files, base_page_dir, pagename
                     )
+                    
+                    app.logger.info(f"文件夹处理结果: success={success}, message={message}")
+                    app.logger.info(f"创建的页面数量: {len(created_pages)}")
+                    
                     if success:
                         import otterwiki.auth
                         author = otterwiki.auth.get_author()
@@ -326,6 +349,8 @@ def create():
                             try:
                                 # 使用完整的页面名称创建页面
                                 full_page_name = page_info['full_page_name']
+                                app.logger.info(f"正在创建页面: {full_page_name} (来自 {file_path})")
+                                
                                 page = Page(pagename=full_page_name)
                                 
                                 # 保存页面到git版本控制
@@ -337,19 +362,35 @@ def create():
                                 )
                                 
                                 created_count += 1
-                                app.logger.info(f"Created page: {full_page_name}")
+                                app.logger.info(f"成功创建页面: {full_page_name}")
                                 
                             except Exception as e:
-                                app.logger.error(f"Error creating page for {file_path}: {str(e)}")
+                                app.logger.error(f"创建页面失败 {file_path}: {str(e)}")
                                 # 继续处理其他文件，不中断整个流程
+                        
+                        app.logger.info(f"最终创建的页面数量: {created_count}")
                         
                         # 显示成功消息
                         if created_count > 0:
                             toast(f"成功批量创建 {created_count} 个页面")
-                            # 跳转到第一个创建的页面
-                            first_page = list(created_pages.values())[0]
-                            first_page_name = first_page['full_page_name']
-                            return redirect(url_for("view", path=first_page_name))
+                            # 不立即跳转，而是显示成功页面
+                            # 收集所有创建的页面信息用于显示
+                            created_pages_info = []
+                            for file_path, page_info in created_pages.items():
+                                created_pages_info.append({
+                                    'file_path': file_path,
+                                    'page_name': page_info['full_page_name'],
+                                    'content_preview': page_info['content'][:100] + '...' if len(page_info['content']) > 100 else page_info['content']
+                                })
+                            
+                            # 渲染成功页面
+                            return render_template(
+                                "folder_upload_success.html",
+                                title="文件夹上传成功",
+                                created_count=created_count,
+                                created_pages=created_pages_info,
+                                folder_name=pagename
+                            )
                         else:
                             toast("批量创建完成，但未找到可处理的文件")
                             return redirect(url_for("index"))
@@ -360,6 +401,7 @@ def create():
                     app.logger.error(f"Error processing folder upload: {str(e)}")
                     toast("处理文件夹上传时出错。", "error")
             else:
+                app.logger.warning("文件夹上传: 没有选择文件或文件列表为空")
                 toast("未选择要上传的文件夹。", "warning")
         return p.create()
 
@@ -680,3 +722,50 @@ def git_upload_pack():
 @app.route("/.git/git-receive-pack", methods=["POST"])
 def git_receive_pack():
     return githttpserver.git_receive_pack(request.stream)
+
+
+def generate_unique_pagename(base_pagename: str, pagepath: str = "") -> str:
+    """
+    生成唯一的页面名称，如果存在同名文件则添加序号
+    
+    Args:
+        base_pagename: 基础页面名称（不含序号）
+        pagepath: 页面路径前缀
+        
+    Returns:
+        唯一的页面名称
+    """
+    # 清理基础页面名称
+    base_pagename = sanitize_pagename(base_pagename)
+    
+    # 如果页面路径不为空，构建完整路径
+    if pagepath:
+        full_pagepath = f"{pagepath}/{base_pagename}"
+    else:
+        full_pagepath = base_pagename
+    
+    # 检查基础名称是否已存在
+    test_page = Page(pagename=full_pagepath)
+    if not test_page.exists:
+        return base_pagename
+    
+    # 如果存在，开始添加序号
+    counter = 1
+    while True:
+        numbered_pagename = f"{base_pagename}_{counter}"
+        if pagepath:
+            test_full_pagepath = f"{pagepath}/{numbered_pagename}"
+        else:
+            test_full_pagepath = numbered_pagename
+        
+        test_page = Page(pagename=test_full_pagepath)
+        if not test_page.exists:
+            return numbered_pagename
+        
+        counter += 1
+        
+        # 防止无限循环
+        if counter > 1000:
+            # 如果序号太大，使用时间戳
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            return f"{base_pagename}_{timestamp}"
