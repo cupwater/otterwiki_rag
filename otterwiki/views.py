@@ -32,10 +32,9 @@ from otterwiki.wiki import (
 import otterwiki.auth
 import otterwiki.preferences
 from otterwiki.renderer import render
-from otterwiki.helper import toast, health_check, get_pagename_prefixes, get_attachment_directoryname, get_filename, get_pagename, get_pagepath, upsert_pagecrumbs
-from otterwiki.util import sanitize_pagename, split_path, get_page_directoryname
+from otterwiki.helper import toast, health_check, get_pagename_prefixes, get_attachment_directoryname, get_filename, get_pagename, upsert_pagecrumbs
+from otterwiki.util import sanitize_pagename, split_path, get_page_directoryname, get_pagepath
 from otterwiki.version import __version__
-from otterwiki.util import UTC
 
 from flask_login import login_required
 
